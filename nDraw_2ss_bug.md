@@ -4,4 +4,42 @@ back key
 injectInputEvent android/hardware/input/InputManager.java  
 onKeyUp　android/app/Activity.java  
 
-
+```
+D/Activity( 6555): Activity
+D/Activity( 6555): java.lang.Throwable
+D/Activity( 6555):      at android.app.Activity.onKeyDown(Activity.java:2106)
+D/Activity( 6555):      at android.view.KeyEvent.dispatch(KeyEvent.java:2640)
+D/Activity( 6555):      at android.app.Activity.dispatchKeyEvent(Activity.java:2429)
+D/Activity( 6555):      at com.android.internal.policy.impl.PhoneWindow$DecorView.dispatchKeyEvent(PhoneWindow.java:1962)
+D/Activity( 6555):      at android.view.ViewRootImpl$ViewPostImeInputStage.processKeyEvent(ViewRootImpl.java:3991)
+D/Activity( 6555):      at android.view.ViewRootImpl$ViewPostImeInputStage.onProcess(ViewRootImpl.java:3965)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:3538)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:3588)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:3557)
+D/Activity( 6555):      at android.view.ViewRootImpl$AsyncInputStage.forward(ViewRootImpl.java:3664)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.apply(ViewRootImpl.java:3565)
+D/Activity( 6555):      at android.view.ViewRootImpl$AsyncInputStage.apply(ViewRootImpl.java:3721)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:3538)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:3588)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:3557)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.apply(ViewRootImpl.java:3565)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.deliver(ViewRootImpl.java:3538)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.onDeliverToNext(ViewRootImpl.java:3588)
+D/Activity( 6555):      at android.view.ViewRootImpl$InputStage.forward(ViewRootImpl.java:3557)
+D/Activity( 6555):      at android.view.ViewRootImpl$AsyncInputStage.forward(ViewRootImpl.java:3697)
+D/Activity( 6555):      at android.view.ViewRootImpl$ImeInputStage.onFinishedInputEvent(ViewRootImpl.java:3857)
+D/Activity( 6555):      at android.view.inputmethod.InputMethodManager$PendingEvent.run(InputMethodManager.java:2010)
+D/Activity( 6555):      at android.view.inputmethod.InputMethodManager.invokeFinishedInputEventCallback(InputMethodManager.java:1704)
+D/Activity( 6555):      at android.view.inputmethod.InputMethodManager.finishedInputEvent(InputMethodManager.java:1695)
+D/Activity( 6555):      at android.view.inputmethod.InputMethodManager$ImeInputEventSender.onInputEventFinished(InputMethodManager.java:1987)
+D/Activity( 6555):      at android.view.InputEventSender.dispatchInputEventFinished(InputEventSender.java:141)
+D/Activity( 6555):      at android.os.MessageQueue.nativePollOnce(Native Method)
+D/Activity( 6555):      at android.os.MessageQueue.next(MessageQueue.java:138)
+D/Activity( 6555):      at android.os.Looper.loop(Looper.java:124)
+D/Activity( 6555):      at android.app.ActivityThread.main(ActivityThread.java:5017)
+D/Activity( 6555):      at java.lang.reflect.Method.invokeNative(Native Method)
+D/Activity( 6555):      at java.lang.reflect.Method.invoke(Method.java:515)
+D/Activity( 6555):      at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+D/Activity( 6555):      at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+D/Activity( 6555):      at dalvik.system.NativeStart.main(Native Method)
+```
