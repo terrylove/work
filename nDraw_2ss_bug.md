@@ -4,6 +4,9 @@ back key
 injectInputEvent android/hardware/input/InputManager.java  
 onKeyUp　android/app/Activity.java  
 
+Normal onKeydown flow
+==============
+
 ```
 D/Activity( 6555): Activity
 D/Activity( 6555): java.lang.Throwable
@@ -43,3 +46,47 @@ D/Activity( 6555):      at com.android.internal.os.ZygoteInit$MethodAndArgsCalle
 D/Activity( 6555):      at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
 D/Activity( 6555):      at dalvik.system.NativeStart.main(Native Method)
 ```
+when backkey keydown and keyup in suspend state,
+dispatchKeyEvent com/android/internal/policy/impl/PhoneWindow.java
+only show isDown 0, that mean KeyEvent Action does not ACTION_DOWN, so we forcus to InputReader InputDispatcher to see how to initial a KeyEvent
+
+In InputDispatcher::notifyKey frameworks/base/services/input/InputDispatcher.cpp
+we try to check interceptKeyBeforeQueueing to get correct policyFlag, we found that policyFlag does not set to ACTION_PASS_TO_USER, that mean backkey keydown does not pass to app. if keydown does not pass to app, 
+
+```
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        Log.d(TAG,TAG,new Throwable());
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (getApplicationInfo().targetSdkVersion
+                    >= Build.VERSION_CODES.ECLAIR) {
+                event.startTracking();
+            } else {
+                onBackPressed();
+            }
+            return true;
+        }
+```
+
+```
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG,TAG,new Throwable());
+
+        if (getApplicationInfo().targetSdkVersion
+                >= Build.VERSION_CODES.ECLAIR) {
+            Log.d(TAG,"event.isTracking()" + event.isTracking());
+            Log.d(TAG,"event.isCanceled()" + event.isCanceled());
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
+                    && !event.isCanceled()) {
+                onBackPressed();
+                return true;
+            }
+        }
+        return false;
+    }
+```
+
+event.isTracking() will not be true
+
+
+
+
