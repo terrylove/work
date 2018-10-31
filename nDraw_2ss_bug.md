@@ -99,8 +99,15 @@ In frameworks/base/core/java/android/app/Activity.java
 event.isTracking() will not be true, finish will not be executed
 
 
-＊＊＊
+---
+
 [nDraw suspend] power key long press in suspend state, show and dismiss power dialog. device go to hibernation when release power key
 ===============
+pvi_io : do not get the command [400]
+
+Due to miss CM_POWER_BTN_RAW ioctl in mx6dl_ntx_io.c, PowerManagerEx can not get correct power key state. behavior become strange.
+
+
+
 
 
