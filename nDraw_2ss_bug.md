@@ -1,4 +1,5 @@
 [nDraw 2ss] Back key does not work when device in suspend state
+=====================
 
 back key  
 injectInputEvent android/hardware/input/InputManager.java  
@@ -98,5 +99,6 @@ In frameworks/base/core/java/android/app/Activity.java
 event.isTracking() will not be true, finish will not be executed
 
 
+＊＊＊
 
 
