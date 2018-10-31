@@ -100,5 +100,7 @@ event.isTracking() will not be true, finish will not be executed
 
 
 ＊＊＊
+[nDraw suspend] power key long press in suspend state, show and dismiss power dialog. device go to hibernation when release power key
+===============
 
 
