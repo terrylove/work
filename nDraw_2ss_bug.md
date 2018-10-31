@@ -53,7 +53,8 @@ only show isDown 0, that mean KeyEvent Action does not ACTION_DOWN, so we forcus
 In InputDispatcher::notifyKey frameworks/base/services/input/InputDispatcher.cpp
 we try to check interceptKeyBeforeQueueing to get correct policyFlag, we found that policyFlag does not set to ACTION_PASS_TO_USER, that mean backkey keydown does not pass to app. if keydown does not pass to app, 
 
-```
+In frameworks/base/core/java/android/app/Activity.java
+```java
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         Log.d(TAG,TAG,new Throwable());
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -67,7 +68,7 @@ we try to check interceptKeyBeforeQueueing to get correct policyFlag, we found t
         }
 ```
 
-```
+```java
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Log.d(TAG,TAG,new Throwable());
 
@@ -85,7 +86,16 @@ we try to check interceptKeyBeforeQueueing to get correct policyFlag, we found t
     }
 ```
 
-event.isTracking() will not be true
+```java
+    public void onBackPressed() {
+        Log.d(TAG,"mFragments.popBackStackImmediate()" + mFragments.popBackStackImmediate());
+        if (!mFragments.popBackStackImmediate()) {
+            finish();
+        }
+    }
+```
+
+event.isTracking() will not be true, finish will not be executed
 
 
 
