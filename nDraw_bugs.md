@@ -279,8 +279,91 @@ gralloc alloc
 
 gralloc framebuffer or buffer, it depend on usage
 
+```c
+int fsl_gralloc_alloc(alloc_device_t* dev,
+        int w, int h, int format, int usage,
+        buffer_handle_t* pHandle, int* pStride)
+{
+    ...
 
+    private_handle_t* hnd = NULL;
+    if (usage & GRALLOC_USAGE_HW_FBX) {
+        gralloc_context_t *ctx = (gralloc_context_t *)dev;
+        if (ctx->ext_dev == NULL) {
+            ALOGE("ctx->ext_dev == NULL");
+            return -EINVAL;
+        }
 
+        err = fsl_gralloc_alloc_framebuffer(ctx->ext_dev, size, usage, (buffer_handle_t*)&hnd);
+    }
+    else if (usage & GRALLOC_USAGE_HW_FB) {
+        ALOGD("[%s %d] alloc framebuffer",__func__, __LINE__);
+        err = fsl_gralloc_alloc_framebuffer(dev, size, usage, (buffer_handle_t*)&hnd);
+    }
+    else {
+        ALOGD("[%s %d] alloc buffer",__func__, __LINE__);
+        err = fsl_gralloc_alloc_buffer(dev, size, usage, (buffer_handle_t*)&hnd);
+    }
+
+    ...
+}
+```
+
+FrameBufferSurface producer enqueue
+---------
+
+```
+BufferQueue.cpp:482           android::BufferQueue::queueBuffer(int, android::IGraphicBufferProducer::QueueBufferInput const&, android::IGraphicBufferProducer::QueueBufferOutput*)
+Surface.cpp:291               android::Surface::queueBuffer(ANativeWindowBuffer*, int)
+Surface.cpp:111               android::Surface::hook_queueBuffer(ANativeWindow*, ANativeWindowBuffer*, int)
+egl.cpp:537                   android::egl_window_surface_v2_t::swapBuffers()
+egl.cpp:1962                  eglSwapBuffers
+eglApi.cpp:1108               eglSwapBuffers
+DisplayDevice.cpp:255         android::DisplayDevice::swapBuffers(android::HWComposer&) const
+SurfaceFlinger.cpp:2017       android::SurfaceFlinger::doDisplayComposition(android::sp<android::DisplayDevice const> const&, android::Region const&)
+SurfaceFlinger.cpp:1224       android::SurfaceFlinger::doComposition()
+SurfaceFlinger.cpp:966        android::SurfaceFlinger::handleMessageRefresh()
+SurfaceFlinger.cpp:942        android::SurfaceFlinger::onMessageReceived(int)
+Looper.cpp:302                android::Looper::pollInner(int)
+Looper.cpp:191                android::Looper::pollOnce(int, int*, int*, void**)
+Looper.h:176                  android::Looper::pollOnce(int)
+SurfaceFlinger.cpp:834 (discriminator 1)android::SurfaceFlinger::run()
+main_surfaceflinger.cpp:55    main
+libc_init_dynamic.cpp:112     __libc_init
+```
+
+Network refresh signal icon affect nDraw
+```
+D/ViewRootImpl( 3999): ViewRootImpl
+D/ViewRootImpl( 3999): java.lang.Throwable
+D/ViewRootImpl( 3999):  at android.view.ViewRootImpl.scheduleTraversals(ViewRootImpl.java:1041)
+D/ViewRootImpl( 3999):  at android.view.ViewRootImpl.requestLayout(ViewRootImpl.java:829)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.view.View.requestLayout(View.java:16850)
+D/ViewRootImpl( 3999):  at android.widget.ImageView.setImageResource(ImageView.java:370)
+D/ViewRootImpl( 3999):  at com.android.systemui.statusbar.SignalClusterView.apply(SignalClusterView.java:166)
+D/ViewRootImpl( 3999):  at com.android.systemui.statusbar.SignalClusterView.setWifiIndicators(SignalClusterView.java:104)
+D/ViewRootImpl( 3999):  at com.android.systemui.statusbar.policy.NetworkController.refreshSignalCluster(NetworkController.java:287)
+D/ViewRootImpl( 3999):  at com.android.systemui.statusbar.policy.NetworkController.refreshViews(NetworkController.java:1160)
+D/ViewRootImpl( 3999):  at com.android.systemui.statusbar.policy.NetworkController.onReceive(NetworkController.java:362)
+D/ViewRootImpl( 3999):  at android.app.LoadedApk$ReceiverDispatcher$Args.run(LoadedApk.java:768)
+D/ViewRootImpl( 3999):  at android.os.Handler.handleCallback(Handler.java:733)
+D/ViewRootImpl( 3999):  at android.os.Handler.dispatchMessage(Handler.java:95)
+D/ViewRootImpl( 3999):  at android.os.Looper.loop(Looper.java:136)
+D/ViewRootImpl( 3999):  at android.app.ActivityThread.main(ActivityThread.java:5017)
+D/ViewRootImpl( 3999):  at java.lang.reflect.Method.invokeNative(Native Method)
+D/ViewRootImpl( 3999):  at java.lang.reflect.Method.invoke(Method.java:515)
+D/ViewRootImpl( 3999):  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+D/ViewRootImpl( 3999):  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+D/ViewRootImpl( 3999):  at dalvik.system.NativeStart.main(Native Method)
+
+```
 
 
 
