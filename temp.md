@@ -50,3 +50,33 @@ NativeInputManager::interceptKeyBeforeQueueing　frameworks/base/services/jni/co
 		}
 	}
 ```
+
+
+NDrawSurface
+-----------
+nDraw permission
+
+```c
+void PermissionCache::cache(const String16& permission,
+        uid_t uid, bool granted)
+	
+granted = android::checkPermission(permission, pid, uid);	
+	
+```
+
+IPermissionControl server end
+com/android/server/am/ActivityManagerService.java
+
+```
+static class PermissionController extends IPermissionController.Stub
+
+```
+
+
+```java
+private void grantPermissionsLPw(PackageParser.Package pkg, boolean replace) {
+```
+
+
+
+
