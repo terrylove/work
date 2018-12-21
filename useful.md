@@ -1,7 +1,8 @@
 
 generate static jni header file
 ex: ntx.draw.nDrawHelper
-javah -classpath out/target/common/obj/JAVA_LIBRARIES/nDraw_intermediates/classes-full-debug.jar ntx.draw.nDrawHelper
+javah -d ntx_addon/ncode/src/frameworks/jni/ntx_draw_framework/ -classpath out/target/common/obj/JAVA_LIBRARIES/nDraw_intermediates/classes-full-debug.jar ntx.draw.nDrawHelper
+
 
 -----------------------
 
